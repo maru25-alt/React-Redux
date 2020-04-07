@@ -1,4 +1,5 @@
-import {DELETE_POST , NEW_POST, EDIT_POST} from '../actions/types';
+import {DELETE_POST , NEW_POST, EDIT_POST, HANDELE_CHANGE, SUBMIT_EDIT
+} from '../actions/types';
 
 const intialState = {
     blogs: [
@@ -11,7 +12,8 @@ const intialState = {
 
         }
     ],
-    blog: {}
+    blog: {},
+    isEdit: false,
 }
 
 export default function (state = intialState, action){
@@ -36,9 +38,26 @@ export default function (state = intialState, action){
                 ...state,
                 blog: state.blogs.filter(e => {
                     return e.id === action.payload
-                })
+                }),
+                blogs: state.blogs.filter( e =>{
+                    return e.id != action.payload
+                }),
+                isEdit: true
                 
             };
+
+            case HANDELE_CHANGE: 
+            return {
+                ...state,
+                blog: [{...state.blog, [action.payload.target.name ] : action.payload.target.value}]
+            }
+            case SUBMIT_EDIT:
+                return{
+                    ...state,
+                    blog: {},
+                    blogs: [...state.blogs, action.payload],
+                    isEdit: false,
+                }
            
         default: return state;
     }
@@ -46,19 +65,4 @@ export default function (state = intialState, action){
 }
 
 
-const intialState = {
-  blogs: [],
-  blod: {},
-}
 
-export default function (state = intialState, action){
-
-    switch(action.type){
-        case '':
-            return{
-                ...state
-            };
-
-            default: return state
-    }
-}
